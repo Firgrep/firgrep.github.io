@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" class="scroll-smooth"> <head><meta charset="UTF-8"><meta name="description" content="Personal website of Filip Niklas: philosopher, poet and programmer."><meta name="viewport" content="width=device-width"><meta name="author" content="Filip Niklas"><meta name="keywords" content="Filip Niklas, poetry, philosophy, art, history, economy, programming, ideas, metaphysics"><link rel="icon" type="image/x-icon" href="/favicon.ico"><meta name="generator" content="Astro v4.1.1"><meta property="og:title" content="FN | GCP Network"><meta property="og:description" content="Personal website of Filip Niklas, showcasing projects in philosophy, poetry, programming and economy."><meta property="og:type" content="website"><meta property="og:url" content="https://filipniklas.com/programming/scriptbook/gcp-networks/"><meta property="og:image" content="https://filipniklas.com/fn_four.png"><title>FN | GCP Network</title><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><link rel="stylesheet" href="/_astro/index.CdVtS6rN.css" />
+<!DOCTYPE html><html lang="en" class="scroll-smooth"> <head><meta charset="UTF-8"><meta name="description" content="Personal website of Filip Niklas: philosopher, poet and programmer."><meta name="viewport" content="width=device-width"><meta name="author" content="Filip Niklas"><meta name="keywords" content="Filip Niklas, poetry, philosophy, art, history, economy, programming, ideas, metaphysics"><link rel="icon" type="image/x-icon" href="/favicon.ico"><meta name="generator" content="Astro v4.1.1"><meta property="og:title" content="FN | Handy Git Commands"><meta property="og:description" content="Personal website of Filip Niklas, showcasing projects in philosophy, poetry, programming and economy."><meta property="og:type" content="website"><meta property="og:url" content="https://filipniklas.com/programming/scriptbook/git-handy-cmnds/"><meta property="og:image" content="https://filipniklas.com/fn_four.png"><title>FN | Handy Git Commands</title><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><link rel="stylesheet" href="/_astro/index.CdVtS6rN.css" />
 <link rel="stylesheet" href="/_astro/_slug_.WS5XFDw2.css" />
 <style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0}}@keyframes astroFadeOut{to{opacity:0}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media (prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
 </style><script type="module" src="/_astro/hoisted.TvTH6G4k.js"></script><style>[data-astro-transition-scope="astro-ioirg4gz-1"] { view-transition-name: astro-ioirg4gz-1; }@layer astro { ::view-transition-old(astro-ioirg4gz-1) { 
@@ -216,75 +216,24 @@
     div#scriptbook > ul {
         overflow-y: auto;
     }
-</style> --> </div> <div class="z-30 flex justify-center mt-12 pb-12" data-astro-transition-scope="astro-ioirg4gz-1"> <div class="px-1 lg:px-32 py-8 shadow-xl border border-1 border-gray-300/50 bg-white"> <div class="prose lg:prose-lg prose-h1:font-bold dark:prose text-slate-800 prose-headings:text-slate-800 prose-code:text-inherit prose-a:text-inherit">   <h1 id="gcp-cloud-network">GCP Cloud Network</h1>
-<ul>
-<li>Has no IP address range</li>
-<li>Is global and spans all available regions</li>
-<li>Contains subnetworks</li>
-<li>Is available as <code>default</code>, <code>auto</code> or <code>custom</code> (custom mode networks cannot be converted back to auto)</li>
-<li>Networks isolate systems (VM instances that are in different regions but the same network can communicate via internal IP, but instances which are in the same region but in different networks need to communicate via external IP)</li>
-</ul>
-<p>Subnet is a range of IP addresses that can be used. Except four addresses which are reserved.</p>
-<ul>
-<li>You cannot undo an expansion of IP ranges.</li>
-</ul>
-<p>Normally, each resource requires an external IP address to be able to interact with other resources (such as a VM to a bucket), but under the subnet, Private Google Access can be enabled to do this.</p>
-<p>A VM does not know its external IP, only its internal. The VPC maps the internal address to the external one outside of the VM.</p>
-<p>A VM can be given aliases which are additional IP addresses which can be configured for internal apps and containers running in the VM.</p>
-<h2 id="cloud-nat">Cloud NAT</h2>
-<p>The Cloud NAT gateway implements outbound NAT, but not inbound NAT. In other words, hosts outside of your VPC network can only respond to connections initiated by your instances; they cannot initiate their own, new connections to your instances via NAT.</p>
-<h2 id="shared-vpc-vs-vpc-peering">Shared VPC vs VPC Peering</h2>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<table><thead><tr><th>Consideration</th><th>Shared VPC</th><th>VPC Network Peering</th></tr></thead><tbody><tr><td>Across Organizations</td><td>No</td><td>Yes</td></tr><tr><td>Within Project</td><td>No</td><td>Yes</td></tr><tr><td>Network Admin</td><td>Centralized</td><td>Decentralized</td></tr></tbody></table>
-<h2 id="firewall">Firewall</h2>
-<p>Creating firewall rules by tag rather than by address.</p>
-<blockquote>
-<p>When a VM is created the ephemeral external IP address is assigned from a pool. There is no way to predict which address will be assigned, so there is no way to write a rule that will match that VM’s IP address before it is assigned. Tags allow a symbolic assignment that does not depend on order in the IP addresses. It makes for simpler, more general, and easier to maintain, firewall rules.</p>
-</blockquote>
-<h2 id="basic-commands">Basic commands</h2>
-<p>To list available VPC networks.:</p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> networks</span><span style="color:#9ECBFF"> list</span></span></code></pre>
-<p>To list all available VPC subnets (sorted by VPC network):</p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> networks</span><span style="color:#9ECBFF"> subnets</span><span style="color:#9ECBFF"> list</span><span style="color:#79B8FF"> --sort-by=NETWORK</span></span></code></pre>
-<h2 id="advanced-commands">Advanced commands</h2>
-<h3 id="network">Network</h3>
-<p>Creating Network and Subnets using the command line:</p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> networks</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> managementnet</span><span style="color:#79B8FF"> --project=qwiklabs-gcp-03-4bbb109f4c40</span><span style="color:#79B8FF"> --subnet-mode=custom</span><span style="color:#79B8FF"> --mtu=1460</span><span style="color:#79B8FF"> --bgp-routing-mode=regional</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> networks</span><span style="color:#9ECBFF"> subnets</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> managementsubnet-us</span><span style="color:#79B8FF"> --project=qwiklabs-gcp-03-4bbb109f4c40</span><span style="color:#79B8FF"> --range=10.240.0.0/20</span><span style="color:#79B8FF"> --stack-type=IPV4_ONLY</span><span style="color:#79B8FF"> --network=managementnet</span><span style="color:#79B8FF"> --region=us-west4</span></span></code></pre>
-<p>To create another network with two separate subnets:</p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> networks</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> privatenet</span><span style="color:#79B8FF"> --subnet-mode=custom</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> networks</span><span style="color:#9ECBFF"> subnets</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> privatesubnet-us</span><span style="color:#79B8FF"> --network=privatenet</span><span style="color:#79B8FF"> --region=us-west4</span><span style="color:#79B8FF"> --range=172.16.0.0/24</span></span>
-<span class="line"></span>
-<span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> networks</span><span style="color:#9ECBFF"> subnets</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> privatesubnet-eu</span><span style="color:#79B8FF"> --network=privatenet</span><span style="color:#79B8FF"> --region=europe-west1</span><span style="color:#79B8FF"> --range=172.20.0.0/20</span></span></code></pre>
-<h3 id="firewall-1">Firewall</h3>
-<p>Create a firewall rule using the cloud shell:</p>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color:#B392F0">gcloud</span><span style="color:#9ECBFF"> compute</span><span style="color:#9ECBFF"> firewall-rules</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> privatenet-allow-icmp-ssh-rdp</span><span style="color:#79B8FF"> --direction=INGRESS</span><span style="color:#79B8FF"> --priority=1000</span><span style="color:#79B8FF"> --network=privatenet</span><span style="color:#79B8FF"> --action=ALLOW</span><span style="color:#79B8FF"> --rules=icmp,tcp:22,tcp:3389</span><span style="color:#79B8FF"> --source-ranges=0.0.0.0/0</span></span></code></pre>   </div> </div> </div>  </div> </div>  </div> <div class="relative"> <div class="z-30 absolute bottom-0 left-[50%] transform -translate-x-1/2 translate-y-1/2"> <div class="glass rounded-lg p-2"> <p class="text-xs">© Filip Niklas 2024. All poetry rights reserved. Permission is hereby granted to freely copy and use notes about programming and any code.</p> </div> <div class="h-4"></div> </div> </div> </main> </body> </html>   <script>
+</style> --> </div> <div class="z-30 flex justify-center mt-12 pb-12" data-astro-transition-scope="astro-ioirg4gz-1"> <div class="px-1 lg:px-32 py-8 shadow-xl border border-1 border-gray-300/50 bg-white"> <div class="prose lg:prose-lg prose-h1:font-bold dark:prose text-slate-800 prose-headings:text-slate-800 prose-code:text-inherit prose-a:text-inherit">   <h1 id="handy-git-commands">Handy Git Commands</h1>
+<h3 id="resetting-forked-branch-to-parent">Resetting Forked Branch to Parent</h3>
+<p>Sometimes you have made changes to your main branch on a forked repository and you want to revert those changes to keep it in sync with the parent. There is no way to do this on the GitHub website, but it can be done with Git with a few commands.</p>
+<p><em>Prerequisites</em></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> clone</span><span style="color:#F97583"> &#x3C;</span><span style="color:#9ECBFF">your-forked-repository-ur</span><span style="color:#E1E4E8">l</span><span style="color:#F97583">></span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#F97583"> &#x3C;</span><span style="color:#9ECBFF">your-cloned-repository-director</span><span style="color:#E1E4E8">y</span><span style="color:#F97583">></span></span></code></pre>
+<p>Set and fetch upstream changes.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> remote</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> upstream</span><span style="color:#F97583"> &#x3C;</span><span style="color:#9ECBFF">upstream-repo-ur</span><span style="color:#E1E4E8">l</span><span style="color:#F97583">></span><span style="color:#6A737D"> #Upstream should be the parent repository</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> fetch</span><span style="color:#9ECBFF"> upstream</span></span></code></pre>
+<p>Checkout your main branch (or other designated branch) and reset it to the upstream.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> checkout</span><span style="color:#9ECBFF"> main</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> reset</span><span style="color:#79B8FF"> --hard</span><span style="color:#9ECBFF"> upstream/main</span></span></code></pre>
+<p>Now your local codebase is in sync with the upstream codebase. What remains is to sync this up with your remote (forked) codebase. This will likely require a forced push since you are pushing up a local codebase with <em>less</em> history than what currently exists remotely.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> push</span><span style="color:#79B8FF"> -f</span></span></code></pre>
+<p>That’s it. Your remote repository should now be in sync with the upstream parent.</p>
+<h3 id="resetting-local-branch-to-remote">Resetting Local Branch to Remote</h3>
+<p>If you have made changes to a branch that shouldn’t have new commits added to it directly and you want to reset it to its remote part, you can hard reset your local branch to remote.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> reset</span><span style="color:#79B8FF"> --hard</span><span style="color:#9ECBFF"> origin/</span><span style="color:#F97583">&#x3C;</span><span style="color:#9ECBFF">branc</span><span style="color:#E1E4E8">h</span><span style="color:#F97583">></span></span></code></pre>   </div> </div> </div>  </div> </div>  </div> <div class="relative"> <div class="z-30 absolute bottom-0 left-[50%] transform -translate-x-1/2 translate-y-1/2"> <div class="glass rounded-lg p-2"> <p class="text-xs">© Filip Niklas 2024. All poetry rights reserved. Permission is hereby granted to freely copy and use notes about programming and any code.</p> </div> <div class="h-4"></div> </div> </div> </main> </body> </html>   <script>
 /**
  * Thanks to Astro Paper for this code. See:
  * https://github.com/satnaing/astro-paper/blob/main/src/layouts/PostDetails.astro

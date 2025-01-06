@@ -220,7 +220,10 @@
     }
 </style> --> </div> <div class="z-30 flex justify-center mt-12 pb-12" data-astro-transition-scope="astro-qtsawvgs-1"> <div class="px-1 lg:px-32 py-8 shadow-xl border border-1 border-gray-300/50 bg-white"> <div class="prose lg:prose-lg prose-h1:font-bold dark:prose text-slate-800 prose-headings:text-slate-800 prose-code:text-inherit prose-a:text-inherit prose-li:my-0 prose-ul:my-0 prose-headings:mb-0">   <h1 id="handy-git-commands">Handy Git Commands</h1>
 <h3 id="resetting-forked-branch-to-parent">Resetting Forked Branch to Parent</h3>
-<p>Sometimes you have made changes to your main branch on a forked repository and you want to revert those changes to keep it in sync with the parent. There is no way to do this on the GitHub website, but it can be done with Git with a few commands.</p>
+<p>Sometimes you have made changes to your main branch on a forked repository and
+you want to revert those changes to keep it in sync with the parent. There is no
+way to do this on the GitHub website, but it can be done with Git with a few
+commands.</p>
 <p><em>Prerequisites</em></p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> clone</span><span style="color:#F97583"> &#x3C;</span><span style="color:#9ECBFF">your-forked-repository-ur</span><span style="color:#E1E4E8">l</span><span style="color:#F97583">></span></span>
 <span class="line"><span style="color:#79B8FF">cd</span><span style="color:#F97583"> &#x3C;</span><span style="color:#9ECBFF">your-cloned-repository-director</span><span style="color:#E1E4E8">y</span><span style="color:#F97583">></span></span>
@@ -229,17 +232,31 @@
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> remote</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> upstream</span><span style="color:#F97583"> &#x3C;</span><span style="color:#9ECBFF">upstream-repo-ur</span><span style="color:#E1E4E8">l</span><span style="color:#F97583">></span><span style="color:#6A737D"> #Upstream should be the parent repository</span></span>
 <span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> fetch</span><span style="color:#9ECBFF"> upstream</span></span>
 <span class="line"></span></code></pre>
-<p>Checkout your main branch (or other designated branch) and reset it to the upstream.</p>
+<p>Checkout your main branch (or other designated branch) and reset it to the
+upstream.</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> checkout</span><span style="color:#9ECBFF"> main</span></span>
 <span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> reset</span><span style="color:#79B8FF"> --hard</span><span style="color:#9ECBFF"> upstream/main</span></span>
 <span class="line"></span></code></pre>
-<p>Now your local codebase is in sync with the upstream codebase. What remains is to sync this up with your remote (forked) codebase. This will likely require a forced push since you are pushing up a local codebase with <em>less</em> history than what currently exists remotely.</p>
+<p>Now your local codebase is in sync with the upstream codebase. What remains is
+to sync this up with your remote (forked) codebase. This will likely require a
+forced push since you are pushing up a local codebase with <em>less</em> history than
+what currently exists remotely.</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> push</span><span style="color:#79B8FF"> -f</span></span>
 <span class="line"></span></code></pre>
-<p>That’s it. Your remote repository should now be in sync with the upstream parent.</p>
+<p>That’s it. Your remote repository should now be in sync with the upstream
+parent.</p>
 <h3 id="resetting-local-branch-to-remote">Resetting Local Branch to Remote</h3>
-<p>If you have made changes to a branch that shouldn’t have new commits added to it directly and you want to reset it to its remote part, you can hard reset your local branch to remote.</p>
+<p>If you have made changes to a branch that shouldn’t have new commits added to it
+directly and you want to reset it to its remote part, you can hard reset your
+local branch to remote.</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> reset</span><span style="color:#79B8FF"> --hard</span><span style="color:#9ECBFF"> origin/</span><span style="color:#F97583">&#x3C;</span><span style="color:#9ECBFF">branc</span><span style="color:#E1E4E8">h</span><span style="color:#F97583">></span></span>
+<span class="line"></span></code></pre>
+<h3 id="resetting-a-committed-file">Resetting a Committed File</h3>
+<p>To remote origin:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> checkout</span><span style="color:#9ECBFF"> origin/</span><span style="color:#F97583">&#x3C;</span><span style="color:#9ECBFF">branc</span><span style="color:#E1E4E8">h</span><span style="color:#F97583">></span><span style="color:#F97583"> &#x3C;</span><span style="color:#9ECBFF">path/to/filenam</span><span style="color:#E1E4E8">e</span><span style="color:#F97583">></span></span>
+<span class="line"></span></code></pre>
+<p>Or to local main:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> checkout</span><span style="color:#9ECBFF"> main</span><span style="color:#F97583"> &#x3C;</span><span style="color:#9ECBFF">path/to/filenam</span><span style="color:#E1E4E8">e</span><span style="color:#F97583">></span></span>
 <span class="line"></span></code></pre>   </div> </div> </div>  </div> </div>  </div> <div class="relative"> <div class="z-30 absolute bottom-0 left-[50%] transform -translate-x-1/2 translate-y-1/2"> <div class="glass rounded-lg p-2"> <p class="text-xs">© Filip Niklas 2024. All poetry rights reserved. Permission is hereby granted to freely copy and use notes about programming and any code.</p> </div> <div class="h-4"></div> </div> </div> </main>   </body> </html> <script>
 /**
  * Thanks to Astro Paper for this code. See:

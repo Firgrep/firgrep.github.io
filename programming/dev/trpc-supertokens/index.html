@@ -1,0 +1,662 @@
+<!DOCTYPE html><html lang="en" class="scroll-smooth antialiased"> <head><script type="module">function c(){localStorage.theme==="dark"||!("theme"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}function n(s){const r=`scrollPosition${s}Menu`,e=document.getElementById(s);if(!e)return;let t=sessionStorage.getItem(r);t||(t="0");let o=parseInt(t);e.scrollTop=o,e.addEventListener("scroll",()=>{o=e.scrollTop,sessionStorage.setItem(r,o.toString())})}const l=()=>{n("dev"),n("poems"),c()};document.addEventListener("astro:page-load",()=>{l()});</script><meta charset="UTF-8"><meta name="description" content="Learn how to combine SuperTokens, tRPC, and Next.js to create a type-safe authentication flow with automatic session refresh, resilient API calls, and a clear backend–frontend boundary."><meta name="viewport" content="width=device-width"><meta name="author" content="Filip Niklas"><meta name="keywords" content="Filip Niklas, poetry, philosophy, art, history, economy, programming, ideas, metaphysics"><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="preload" href="/static/images/blue.jpg" as="image"><link rel="preload" href="/static/images/gold.jpg" as="image"><link rel="preload" href="/static/images/gold2.jpg" as="image"><link rel="preload" href="/static/images/green.jpg" as="image"><link rel="preload" href="/static/images/purple.jpg" as="image"><link rel="preload" href="/static/images/purple2.webp" as="image"><link rel="preload" href="/static/assets/poetry/saedah.webp" as="image"><link rel="preload" href="/static/assets/poetry/songs-of-destruction-and-redemption.webp" as="image"><link rel="preload" href="/static/assets/poetry/sourcehood.webp" as="image"><meta name="generator" content="Astro v5.15.8"><meta property="og:title" content="FN | SuperTokens + tRPC + Next.js"><meta property="og:description" content="Learn how to combine SuperTokens, tRPC, and Next.js to create a type-safe authentication flow with automatic session refresh, resilient API calls, and a clear backend–frontend boundary."><meta property="og:type" content="website"><meta property="og:url" content="https://filipniklas.com/programming/dev/trpc-supertokens/"><meta property="og:image" content="https://filipniklas.com/fn_four.png"><title>FN | SuperTokens + tRPC + Next.js</title><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.QW52Ox2j.js"></script><link rel="stylesheet" href="/_astro/cv.CQmPUccl.css">
+<style>.astro-route-announcer{position:absolute;left:0;top:0;clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden;white-space:nowrap;width:1px;height:1px}
+</style>
+<link rel="stylesheet" href="/_astro/_slug_.CfGse28V.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+</style><style>[data-astro-transition-scope="astro-lt4r5lw7-1"] { view-transition-name: astro-lt4r5lw7-1; }@layer astro { ::view-transition-old(astro-lt4r5lw7-1) { 
+	animation-duration: 90ms, 220ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1), cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both, both;
+	animation-name: astroFadeOut, astroSlideToLeft; }::view-transition-new(astro-lt4r5lw7-1) { 
+	animation-duration: 210ms, 220ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1), cubic-bezier(0.76, 0, 0.24, 1);
+	animation-delay: 30ms;
+	animation-fill-mode: both, both;
+	animation-name: astroFadeIn, astroSlideFromRight; }[data-astro-transition=back]::view-transition-old(astro-lt4r5lw7-1) { 
+	animation-name: astroFadeOut, astroSlideToRight; }[data-astro-transition=back]::view-transition-new(astro-lt4r5lw7-1) { 
+	animation-name: astroFadeIn, astroSlideFromLeft; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-lt4r5lw7-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-lt4r5lw7-1"] { 
+	animation-duration: 90ms, 220ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1), cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both, both;
+	animation-name: astroFadeOut, astroSlideToLeft; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-lt4r5lw7-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-lt4r5lw7-1"] { 
+	animation-duration: 210ms, 220ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1), cubic-bezier(0.76, 0, 0.24, 1);
+	animation-delay: 30ms;
+	animation-fill-mode: both, both;
+	animation-name: astroFadeIn, astroSlideFromRight; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-lt4r5lw7-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-lt4r5lw7-1"] { 
+	animation-name: astroFadeOut, astroSlideToRight; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-lt4r5lw7-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-lt4r5lw7-1"] { 
+	animation-name: astroFadeIn, astroSlideFromLeft; }</style><style>[data-astro-transition-scope="astro-2e4iwmx6-2"] { view-transition-name: dev; }@layer astro { ::view-transition-old(dev) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(dev) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(dev) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(dev) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-2e4iwmx6-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-2e4iwmx6-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-2e4iwmx6-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-2e4iwmx6-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-2e4iwmx6-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-2e4iwmx6-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-2e4iwmx6-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-2e4iwmx6-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-bmxrwhcs-3"] { view-transition-name: card1; }@layer astro { ::view-transition-old(card1) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(card1) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(card1) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(card1) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bmxrwhcs-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bmxrwhcs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bmxrwhcs-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bmxrwhcs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bmxrwhcs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bmxrwhcs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bmxrwhcs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bmxrwhcs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-bmxrwhcs-4"] { view-transition-name: card2; }@layer astro { ::view-transition-old(card2) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(card2) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(card2) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(card2) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bmxrwhcs-4"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bmxrwhcs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bmxrwhcs-4"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bmxrwhcs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bmxrwhcs-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bmxrwhcs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bmxrwhcs-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bmxrwhcs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-bmxrwhcs-5"] { view-transition-name: card3; }@layer astro { ::view-transition-old(card3) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(card3) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(card3) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(card3) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bmxrwhcs-5"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bmxrwhcs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bmxrwhcs-5"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bmxrwhcs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bmxrwhcs-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bmxrwhcs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bmxrwhcs-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bmxrwhcs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-bmxrwhcs-6"] { view-transition-name: card4; }@layer astro { ::view-transition-old(card4) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(card4) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(card4) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(card4) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bmxrwhcs-6"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bmxrwhcs-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bmxrwhcs-6"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bmxrwhcs-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-bmxrwhcs-6"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-bmxrwhcs-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-bmxrwhcs-6"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-bmxrwhcs-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body class="relative flex flex-col h-screen overflow-y-scroll custom-main-scrollbar text-slate-800"> <nav class="flex justify-center p-1 gap-4 w-full shadow-lg z-20 bg-gradient-to-r from-pink-700/95 to-rose-900"> <a href="/" class="block absolute z-30 left-[50px] top-[10px] text-neutral-50 text-lg font-semibold after:bg-neutral-50 after:absolute after:h-[2px] after:w-0 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 cursor-pointer">/filipniklas</a> <!-- Desktop layout --> <div class="hidden md:flex gap-4 w-full justify-center px-36"> <div class="screen p-4 flex justify-center items-center z-10 rounded-md h-14 w-52 screen-bg-nav colors-card-1" id="card1" data-astro-cid-gx5ugnmk data-astro-transition-scope="astro-bmxrwhcs-3"> <div class="screen-image-north" data-astro-cid-gx5ugnmk></div> <div class data-astro-cid-gx5ugnmk></div> <div class data-astro-cid-gx5ugnmk> <!-- <i class="screen-icon">ICON</i> --> <div class="screen-user" data-astro-cid-gx5ugnmk>  <a href="/philosophy" data-astro-cid-gx5ugnmk> <p class="!text-neutral-50 text-xs md:text-sm font-semibold relative after:bg-neutral-50 after:absolute after:h-[2px] after:w-0 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 cursor-pointer" data-astro-cid-gx5ugnmk>Philosophy</p> </a> </div> </div> </div>  <div class="screen p-4 flex justify-center items-center z-10 rounded-md h-14 w-52 screen-bg-nav colors-card-2" id="card2" data-astro-cid-gx5ugnmk data-astro-transition-scope="astro-bmxrwhcs-4"> <div class="screen-image-east" data-astro-cid-gx5ugnmk></div> <div class data-astro-cid-gx5ugnmk></div> <div class data-astro-cid-gx5ugnmk> <!-- <i class="screen-icon">ICON</i> --> <div class="screen-user" data-astro-cid-gx5ugnmk>  <a href="/poetry" data-astro-cid-gx5ugnmk> <p class="!text-neutral-50 text-xs md:text-sm font-semibold relative after:bg-neutral-50 after:absolute after:h-[2px] after:w-0 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 cursor-pointer" data-astro-cid-gx5ugnmk>Poetry</p> </a> </div> </div> </div>  <div class="screen p-4 flex justify-center items-center z-10 rounded-md h-14 w-52 screen-bg-nav colors-card-3" id="card3" data-astro-cid-gx5ugnmk data-astro-transition-scope="astro-bmxrwhcs-5"> <div class="screen-image-south" data-astro-cid-gx5ugnmk></div> <div class data-astro-cid-gx5ugnmk></div> <div class data-astro-cid-gx5ugnmk> <!-- <i class="screen-icon">ICON</i> --> <div class="screen-user" data-astro-cid-gx5ugnmk>  <a href="/programming" data-astro-cid-gx5ugnmk> <p class="!text-neutral-50 text-xs md:text-sm font-semibold relative after:bg-neutral-50 after:absolute after:h-[2px] after:w-0 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 cursor-pointer" data-astro-cid-gx5ugnmk>Programming</p> </a> </div> </div> </div>  <div class="screen p-4 flex justify-center items-center z-10 rounded-md h-14 w-52 screen-bg-nav colors-card-4" id="card4" data-astro-cid-gx5ugnmk data-astro-transition-scope="astro-bmxrwhcs-6"> <div class="screen-image-west" data-astro-cid-gx5ugnmk></div> <div class data-astro-cid-gx5ugnmk></div> <div class data-astro-cid-gx5ugnmk> <!-- <i class="screen-icon">ICON</i> --> <div class="screen-user" data-astro-cid-gx5ugnmk>  <a href="/economy" data-astro-cid-gx5ugnmk> <p class="!text-neutral-50 text-xs md:text-sm font-semibold relative after:bg-neutral-50 after:absolute after:h-[2px] after:w-0 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 cursor-pointer" data-astro-cid-gx5ugnmk>Economy</p> </a> </div> </div> </div>  </div> <div class="md:hidden relative flex justify-end w-full" id="mobile-menu"> <input type="checkbox" id="menu-toggle" class="peer hidden"> <label for="menu-toggle" id="menu-toggle-label" class="cursor-pointer text-white px-4 bg-black/40 rounded-md h-14 inline-flex items-center" aria-controls="mobile-dropdown" aria-expanded="false" role="button">
+☰ Menu
+</label> <div id="mobile-dropdown" class="absolute right-0 top-full mt-2 bg-black/80 backdrop-blur-md text-white rounded-lg p-2 flex flex-col gap-1
+           opacity-0 translate-y-2 pointer-events-none transform-gpu transition-all duration-150 ease-out
+           peer-checked:opacity-100 peer-checked:translate-y-0 peer-checked:pointer-events-auto z-40 w-44" role="menu" aria-labelledby="menu-toggle"> <a href="/philosophy" class="block px-3 py-2 rounded-md text-sm font-medium hover:bg-amber-400/75" role="menuitem">Philosophy</a> <a href="/poetry" class="block px-3 py-2 rounded-md text-sm font-medium hover:bg-sky-200/70" role="menuitem">Poetry</a> <a href="/programming" class="block px-3 py-2 rounded-md text-sm font-medium hover:bg-pink-700/90" role="menuitem">Programming</a> <a href="/economy" class="block px-3 py-2 rounded-md text-sm font-medium hover:bg-green-500/80" role="menuitem">Economy</a> </div> <script>
+(() => {
+  const menuContainer = document.getElementById('mobile-menu');
+  if (!menuContainer) return;
+
+  const toggle = menuContainer.querySelector('#menu-toggle');
+  const label = menuContainer.querySelector('label[for="menu-toggle"]');
+  const panel = menuContainer.querySelector('#mobile-dropdown') || menuContainer.querySelector('[role="menu"]');
+
+  if (!toggle || !label || !panel) return;
+
+  function isClickInsideMenu(event) {
+    // Prefer composedPath for shadow DOM friendliness; fall back to target/closest otherwise.
+    const path = event.composedPath ? event.composedPath() : [event.target];
+    for (const node of path) {
+      if (node === menuContainer || node === label || node === panel) return true;
+      // handle cases where a child node (like an <svg> or text node) was clicked:
+      if (node && node.nodeType === 1 && node.closest && node.closest('#mobile-menu')) return true;
+    }
+    return false;
+  }
+
+  function closeMenu() {
+    if (toggle.checked) {
+      toggle.checked = false;
+      if (label) label.setAttribute('aria-expanded', 'false');
+    }
+  }
+
+  function openMenu() {
+    if (!toggle.checked) {
+      toggle.checked = true;
+      if (label) label.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  // Sync aria-expanded with the checkbox initially and on change
+  label.setAttribute('aria-expanded', toggle.checked ? 'true' : 'false');
+  toggle.addEventListener('change', () => label.setAttribute('aria-expanded', toggle.checked ? 'true' : 'false'));
+
+  // Use pointerdown so touch/click are caught early and reliably
+  document.addEventListener('pointerdown', (e) => {
+    // If the pointerdown happened outside menu → close
+    if (!isClickInsideMenu(e)) {
+      // small delay helps avoid interfering with any immediate UI handlers
+      setTimeout(closeMenu, 0);
+    }
+  });
+
+  // Also hide on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  // Optional: if you want clicking a link to close the menu (common UX)
+  panel.querySelectorAll('a[href]').forEach((a) =>
+    a.addEventListener('click', () => {
+      // give navigation a moment, but close the visual menu immediately
+      setTimeout(closeMenu, 0);
+    })
+  );
+})();
+</script> </div> </nav> <main> <div class="flex flex-col min-h-[88vh] mb-20 md:mb-0">  <div class="flex flex-col relative"> <div class="fixed max-w-none w-full scale-110 -translate-y-24 before:absolute before:left-0 before:right-0 before:top-0  before:z-10 before:h-full before:w-full before:bg-white h-full before:opacity-30"> <img src="/static/images/purple2.webp" alt="Image" class="absolute h-screen w-full object-cover z-0"> </div> <div class="z-10">  <div class="absolute inset-0 bg-[url(/static/svg/grid.svg)] -z-10 bg-top [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0.5))]"></div> <div class="flex flex-wrap gap-4 justify-center"> <div class="xl:fixed xl:translate-y-[76px] 2xl:left-20 xl:left-0 lg:top-5 left-1 flex justify-center mt-4 z-10">  <div class="bg-white p-4 rounded-md min-h-[300px] max-h-[500px] overflow-y-scroll custom-scrollbar w-72 shadow-xl" id="dev" data-astro-transition-scope="astro-2e4iwmx6-2"> <ul> <li> <a href="/programming/dev/2024-01-20_possible-cidr-ips/" class="text-blue-500 hover:text-blue-700 hover:underline"> Possible CIDR IPs </a> </li><li> <a href="/programming/dev/trpc-supertokens/" class="text-blue-500 hover:text-blue-700 hover:underline"> SuperTokens + tRPC + Next.js </a> </li> </ul> </div> <!-- <style>
+    /* TODO fix scrollbar on menu not being preserved! */
+    /* div#scriptbook {
+        overflow: hidden;
+    } */
+
+    div#scriptbook > ul {
+        overflow-y: auto;
+    }
+</style> -->  </div> <div class="xl:fixed xl:translate-y-[76px] 2xl:right-20 xl:right-0 lg:top-5 right-1 flex justify-center mt-4 z-10"> <aside class="bg-white p-4 rounded-md min-h-[300px] max-h-[500px] overflow-y-scroll custom-scrollbar w-72 shadow-xl"><ul><li><a href="/programming/dev/trpc-supertokens/#why-this-stack" class="text-blue-500 hover:text-blue-700 hover:underline"><b>Why this stack?</b></a></li><li><a href="/programming/dev/trpc-supertokens/#the-core-idea" class="text-blue-500 hover:text-blue-700 hover:underline"><b>The core idea</b></a></li><li><a href="/programming/dev/trpc-supertokens/#project-layout-highlevel" class="text-blue-500 hover:text-blue-700 hover:underline"><b>Project layout (high‑level)</b></a></li><li><a href="/programming/dev/trpc-supertokens/#the-custom-auth-signal" class="text-blue-500 hover:text-blue-700 hover:underline"><b>The custom auth signal</b></a></li><li><a href="/programming/dev/trpc-supertokens/#server-building-the-context" class="text-blue-500 hover:text-blue-700 hover:underline"><b>Server: building the context</b></a></li><li class="pl-3"><a href="/programming/dev/trpc-supertokens/#authenticated-procedure-middleware" class="text-blue-500 hover:text-blue-700 hover:underline">Authenticated procedure middleware</a></li><li><a href="/programming/dev/trpc-supertokens/#client-intercept-refresh-retry" class="text-blue-500 hover:text-blue-700 hover:underline"><b>Client: intercept, refresh, retry</b></a></li><li><a href="/programming/dev/trpc-supertokens/#tanstack-query-setup" class="text-blue-500 hover:text-blue-700 hover:underline"><b>TanStack Query setup</b></a></li><li><a href="/programming/dev/trpc-supertokens/#routers-vs-handlers" class="text-blue-500 hover:text-blue-700 hover:underline"><b>Routers vs. handlers</b></a></li><li><a href="/programming/dev/trpc-supertokens/#endtoend-typing-helpers" class="text-blue-500 hover:text-blue-700 hover:underline"><b>End‑to‑end typing helpers</b></a></li><li><a href="/programming/dev/trpc-supertokens/#common-pitfalls-and-fixes" class="text-blue-500 hover:text-blue-700 hover:underline"><b>Common pitfalls (and fixes)</b></a></li><li><a href="/programming/dev/trpc-supertokens/#testing-the-flow" class="text-blue-500 hover:text-blue-700 hover:underline"><b>Testing the flow</b></a></li><li><a href="/programming/dev/trpc-supertokens/#security-notes" class="text-blue-500 hover:text-blue-700 hover:underline"><b>Security notes</b></a></li><li><a href="/programming/dev/trpc-supertokens/#wrapping-up" class="text-blue-500 hover:text-blue-700 hover:underline"><b>Wrapping up</b></a></li><li><a href="/programming/dev/trpc-supertokens/#appendix-minimal-checklist" class="text-blue-500 hover:text-blue-700 hover:underline"><b>Appendix: minimal checklist</b></a></li></ul></aside> </div> </div> <div class="z-30 flex justify-center mt-12 pb-12" data-astro-transition-scope="astro-lt4r5lw7-1"> <div class="px-1 md:px-6 lg:px-32 py-8 shadow-xl border border-1 border-gray-300/50 bg-white"> <div class="prose prose-sm lg:prose-lg prose-h1:font-bold dark:prose text-slate-800 prose-headings:text-slate-800 prose-code:text-inherit prose-a:text-inherit prose-li:my-0 prose-ul:my-0 prose-headings:mb-0 prose-pre:max-w-[90vw] prose-pre:overflow-x-auto prose-code:break-words max-w-[91vw] sm:max-w-[65ch]">   <h1 id="supertokens--trpc--nextjs">SuperTokens + tRPC + Next.js</h1>
+<blockquote>
+<p>A step‑by‑step walkthrough of wiring SuperTokens sessions into a Next.js app
+that uses tRPC and TanStack Query — with resilient, automatic refresh and
+clean separation of API logic.</p>
+</blockquote>
+<p><a href="https://github.com/Solgt/trpc-supertokens">Demo Repo</a> ·
+<a href="https://solgt.no/blog/trpc-supertokens">Originally published at Solgt.no</a></p>
+<hr>
+<h2 id="why-this-stack">Why this stack?</h2>
+<ul>
+<li><strong>tRPC</strong> lets us define type‑safe backend routers and call them from the
+client with end‑to‑end types. Great DX.</li>
+<li><strong>SuperTokens</strong> handles auth/session with refresh tokens, CSRF protection, and
+battle‑tested flows.</li>
+<li><strong>Next.js</strong> gives us file‑based routing and server components.</li>
+<li><strong>TanStack Query</strong> powers caching, retries, and de/serialization for our
+procedure calls.</li>
+</ul>
+<p>Together, they can feel “click‑together”, APIs and data flows that align so well
+that the integration feels smooth—if you respect how <strong>session refresh</strong> and
+<strong>API error handling</strong> flow. That’s what this guide focuses on.</p>
+<hr>
+<h2 id="the-core-idea">The core idea</h2>
+<ol>
+<li><strong>Backend</strong>: every tRPC request constructs context from the incoming
+<code>NextRequest</code> and cookies. If a session is missing <strong>but refresh is still
+possible</strong>, the server replies with a <em>custom</em> auth error code (not a
+redirect), signalling the client to attempt a refresh.</li>
+<li><strong>Client</strong>: the tRPC client intercepts that custom error, calls
+<code>Session.attemptRefreshingSession()</code>, and retries the original request
+<strong>once</strong>. If it fails, we send the user to login.</li>
+</ol>
+<p>This handshake preserves tRPC’s ergonomics (no manual <code>fetch</code> juggling) while
+keeping SuperTokens’ refresh semantics intact.</p>
+<hr>
+<h2 id="project-layout-highlevel">Project layout (high‑level)</h2>
+<p><strong>Frontend</strong></p>
+<ul>
+<li><code>components/trpc/trpcTanstack.provider.tsx</code> – wraps your app with TanStack
+Query + tRPC providers and wires the <em>refresh‑on‑custom‑error</em> logic.</li>
+<li><code>components/trpc/trpc.client.ts</code> – exports a typed <code>TRPCProvider</code> and hooks.</li>
+<li><code>hooks/useUser.ts</code> – example hooks for user queries/mutations.</li>
+<li><code>hooks/useSessionCheck.ts</code> – quick “is there a session?” helper.</li>
+</ul>
+<p><strong>Backend</strong></p>
+<ul>
+<li><code>server/trpc/trpc.ts</code> – tRPC init + context creation + protected/public
+procedures + error formatting.</li>
+<li><code>server/trpc/root.ts</code> – top‑level router.</li>
+<li><code>server/trpc/index.ts</code> – re‑exports types and helpers.</li>
+<li><code>server/trpc/authErrorCodes.ts</code> – custom auth error codes used by both sides.</li>
+<li><code>server/trpc/router/*</code> – routers organized by domain.</li>
+<li><code>server/trpc/handlers/*</code> – business logic in composable handler classes.</li>
+</ul>
+<p>This separation keeps <strong>routing skinny</strong> and <strong>handlers focused</strong>.</p>
+<hr>
+<h2 id="the-custom-auth-signal">The custom auth signal</h2>
+<p>Create a small shared enum that both client and server import:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#6A737D">// server/trpc/authErrorCodes.ts</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> AUTH_ERROR_CODES</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    NEEDS_REFRESH: </span><span style="color:#9ECBFF">"NEEDS_REFRESH"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    FORBIDDEN: </span><span style="color:#9ECBFF">"FORBIDDEN"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    INTERNAL_SERVER_ERROR: </span><span style="color:#9ECBFF">"INTERNAL_SERVER_ERROR"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">} </span><span style="color:#F97583">as</span><span style="color:#F97583"> const</span><span style="color:#E1E4E8">;</span></span></code></pre>
+<p>We’ll use <code>NEEDS_REFRESH</code> to tell the client: “You’ve got cookies; your access
+token is stale; try refreshing.”</p>
+<hr>
+<h2 id="server-building-the-context">Server: building the context</h2>
+<p>The server inspects cookies to determine whether we can refresh <em>without</em>
+blindly rejecting the request. With SuperTokens, <code>getSSRSession</code> reads and
+verifies session cookies in an SSR‑safe way.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#6A737D">// server/trpc/trpc.ts (excerpt)</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { getSSRSession } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "supertokens-node/nextjs"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { AUTH_ERROR_CODES } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "./authErrorCodes"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { TRPCError } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@trpc/server"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> const</span><span style="color:#B392F0"> createTRPCContext</span><span style="color:#F97583"> =</span><span style="color:#F97583"> async</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">opts</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> { </span><span style="color:#FFAB70">req</span><span style="color:#F97583">:</span><span style="color:#B392F0"> NextRequest</span><span style="color:#E1E4E8"> }) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> cookies</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> opts.req.cookies?.</span><span style="color:#B392F0">getAll</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">||</span><span style="color:#E1E4E8"> [];</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#E1E4E8"> { </span><span style="color:#79B8FF">accessTokenPayload</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">hasToken</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">=</span><span style="color:#F97583"> await</span><span style="color:#B392F0"> getSSRSession</span><span style="color:#E1E4E8">(cookies);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // User has tokens but access token is missing/expired → ask client to refresh</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (accessTokenPayload </span><span style="color:#F97583">===</span><span style="color:#79B8FF"> undefined</span><span style="color:#F97583"> &#x26;&#x26;</span><span style="color:#E1E4E8"> hasToken) {</span></span>
+<span class="line"><span style="color:#F97583">        throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> TRPCError</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">            code: </span><span style="color:#9ECBFF">"UNAUTHORIZED"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">            message: </span><span style="color:#9ECBFF">"Session expired, refresh required"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">            cause: { type: </span><span style="color:#79B8FF">AUTH_ERROR_CODES</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">NEEDS_REFRESH</span><span style="color:#E1E4E8">, hasToken: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">        req: opts.req,</span></span>
+<span class="line"><span style="color:#E1E4E8">        session: { supertokensId: accessTokenPayload?.sub },</span></span>
+<span class="line"><span style="color:#E1E4E8">    };</span></span>
+<span class="line"><span style="color:#E1E4E8">};</span></span></code></pre>
+<h3 id="authenticated-procedure-middleware">Authenticated procedure middleware</h3>
+<p>For protected routes, we first make a reusable base authenticated procedure,
+repeat the pattern and give sharper errors:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#6A737D">// server/trpc/trpc.ts (excerpt)</span></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> isAuthenticated</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> t.</span><span style="color:#B392F0">middleware</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">async</span><span style="color:#E1E4E8"> ({ </span><span style="color:#FFAB70">ctx</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">next</span><span style="color:#E1E4E8"> }) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> cookies</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> ctx.req.cookies?.</span><span style="color:#B392F0">getAll</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">||</span><span style="color:#E1E4E8"> [];</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#E1E4E8"> { </span><span style="color:#79B8FF">accessTokenPayload</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">error</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">hasToken</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">=</span></span>
+<span class="line"><span style="color:#F97583">        await</span><span style="color:#B392F0"> getSSRSession</span><span style="color:#E1E4E8">(cookies);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (error) {</span></span>
+<span class="line"><span style="color:#E1E4E8">        console.</span><span style="color:#B392F0">error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Session verification error:"</span><span style="color:#E1E4E8">, error);</span></span>
+<span class="line"><span style="color:#F97583">        throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> TRPCError</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">            code: </span><span style="color:#9ECBFF">"INTERNAL_SERVER_ERROR"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">            message: </span><span style="color:#9ECBFF">"Session verification failed"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (accessTokenPayload </span><span style="color:#F97583">===</span><span style="color:#79B8FF"> undefined</span><span style="color:#F97583"> &#x26;&#x26;</span><span style="color:#E1E4E8"> hasToken) {</span></span>
+<span class="line"><span style="color:#F97583">        throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> TRPCError</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">            code: </span><span style="color:#9ECBFF">"UNAUTHORIZED"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">            message: </span><span style="color:#9ECBFF">"Session expired, refresh required"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">            cause: { type: </span><span style="color:#79B8FF">AUTH_ERROR_CODES</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">NEEDS_REFRESH</span><span style="color:#E1E4E8">, hasToken: </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (accessTokenPayload </span><span style="color:#F97583">===</span><span style="color:#79B8FF"> undefined</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> TRPCError</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">            code: </span><span style="color:#9ECBFF">"UNAUTHORIZED"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">            message: </span><span style="color:#9ECBFF">"Authentication required"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">            cause: { type: </span><span style="color:#79B8FF">AUTH_ERROR_CODES</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">FORBIDDEN</span><span style="color:#E1E4E8">, hasToken: </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8"> },</span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#B392F0"> next</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">        ctx: { session: { supertokensId: accessTokenPayload.sub</span><span style="color:#F97583">!</span><span style="color:#E1E4E8"> } },</span></span>
+<span class="line"><span style="color:#E1E4E8">    });</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> protectedProcedure</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> t.procedure.</span><span style="color:#B392F0">use</span><span style="color:#E1E4E8">(isAuthenticated);</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> publicProcedure</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> t.procedure;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// See example of handlers tied to specific procedures below</span></span></code></pre>
+<p>Tip: by attaching <em>domain handlers</em> in middleware (e.g.,
+<code>handler: new UserHandler(ctx)</code>), your routers stay declarative and business
+logic lives in testable classes.</p>
+<hr>
+<h2 id="client-intercept-refresh-retry">Client: intercept, refresh, retry</h2>
+<p>We build a single tRPC client that adds a <code>fetch</code> wrapper inside
+<code>httpBatchLink</code>. When the server returns <code>NEEDS_REFRESH</code>, the client calls
+SuperTokens’ refresh and retries <strong>once</strong>.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="tsx"><code><span class="line"><span style="color:#6A737D">// components/trpc/trpcTanstack.provider.tsx (excerpt)</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> Session </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "supertokens-web-js/recipe/session"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { AUTH_ERROR_CODES } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@/src/server/trpc/authErrorCodes"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> getHttpBatchLink</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> baseUrl</span><span style="color:#F97583"> =</span></span>
+<span class="line"><span style="color:#F97583">        typeof</span><span style="color:#E1E4E8"> window </span><span style="color:#F97583">!==</span><span style="color:#9ECBFF"> "undefined"</span></span>
+<span class="line"><span style="color:#F97583">            ?</span><span style="color:#E1E4E8"> window.location.origin</span></span>
+<span class="line"><span style="color:#F97583">            :</span><span style="color:#9ECBFF"> "http://localhost:3000"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#9ECBFF"> `${</span><span style="color:#E1E4E8">baseUrl</span><span style="color:#9ECBFF">}/api/trpc`</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> TrpcTanstackProvider</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#FFAB70">    children</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#FFAB70">    children</span><span style="color:#F97583">:</span><span style="color:#B392F0"> React</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">ReactNode</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}) {</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> queryClient</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> getQueryClient</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">trpcClient</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#B392F0"> useState</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span></span>
+<span class="line"><span style="color:#B392F0">        createTRPCClient</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">TRPCRouter</span><span style="color:#E1E4E8">>({</span></span>
+<span class="line"><span style="color:#E1E4E8">            links: [</span></span>
+<span class="line"><span style="color:#B392F0">                httpBatchLink</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">                    url: </span><span style="color:#B392F0">getHttpBatchLink</span><span style="color:#E1E4E8">(),</span></span>
+<span class="line"><span style="color:#E1E4E8">                    transformer: </span><span style="color:#B392F0">require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"superjson"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#B392F0">                    fetch</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">async</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">url</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">options</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">                        const</span><span style="color:#79B8FF"> response</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#B392F0"> fetch</span><span style="color:#E1E4E8">(url, options);</span></span>
+<span class="line"><span style="color:#F97583">                        if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">response.ok) {</span></span>
+<span class="line"><span style="color:#F97583">                            const</span><span style="color:#79B8FF"> errorData</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> response</span></span>
+<span class="line"><span style="color:#E1E4E8">                                .</span><span style="color:#B392F0">clone</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">                                .</span><span style="color:#B392F0">json</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">                                .</span><span style="color:#B392F0">catch</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span><span style="color:#79B8FF"> undefined</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">                            const</span><span style="color:#79B8FF"> type</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> errorData?.error?.data?.cause?.type;</span></span>
+<span class="line"><span style="color:#F97583">                            if</span><span style="color:#E1E4E8"> (type </span><span style="color:#F97583">===</span><span style="color:#79B8FF"> AUTH_ERROR_CODES</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">NEEDS_REFRESH</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">                                if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">await</span><span style="color:#E1E4E8"> Session.</span><span style="color:#B392F0">attemptRefreshingSession</span><span style="color:#E1E4E8">()) {</span></span>
+<span class="line"><span style="color:#F97583">                                    return</span><span style="color:#B392F0"> fetch</span><span style="color:#E1E4E8">(url, options); </span><span style="color:#6A737D">// retry once after refresh</span></span>
+<span class="line"><span style="color:#E1E4E8">                                }</span></span>
+<span class="line"><span style="color:#E1E4E8">                                window.location.href </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "/?refreshFailed=true"</span><span style="color:#E1E4E8">; </span><span style="color:#6A737D">// TODO: change this to something more appropriate</span></span>
+<span class="line"><span style="color:#F97583">                                throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Session refresh failed"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">                            }</span></span>
+<span class="line"><span style="color:#E1E4E8">                        }</span></span>
+<span class="line"><span style="color:#F97583">                        return</span><span style="color:#E1E4E8"> response;</span></span>
+<span class="line"><span style="color:#E1E4E8">                    },</span></span>
+<span class="line"><span style="color:#E1E4E8">                }),</span></span>
+<span class="line"><span style="color:#E1E4E8">            ],</span></span>
+<span class="line"><span style="color:#E1E4E8">        })</span></span>
+<span class="line"><span style="color:#E1E4E8">    );</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E1E4E8">        &#x3C;</span><span style="color:#79B8FF">QueryClientProvider</span><span style="color:#B392F0"> client</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{queryClient}></span></span>
+<span class="line"><span style="color:#E1E4E8">            &#x3C;</span><span style="color:#79B8FF">TRPCProvider</span><span style="color:#B392F0"> trpcClient</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{trpcClient} </span><span style="color:#B392F0">queryClient</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{queryClient}></span></span>
+<span class="line"><span style="color:#E1E4E8">                {children}</span></span>
+<span class="line"><span style="color:#E1E4E8">            &#x3C;/</span><span style="color:#79B8FF">TRPCProvider</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">        &#x3C;/</span><span style="color:#79B8FF">QueryClientProvider</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">    );</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>The result: <em>transparent</em> refresh during normal app usage. Your components keep
+using tRPC hooks as if nothing happened.</p>
+<hr>
+<h2 id="tanstack-query-setup">TanStack Query setup</h2>
+<p>Use a single <code>QueryClient</code> with SuperJSON (de)serialization and a global
+mutation error handler for toasts/logging. Keep one browser client instance
+across suspense boundaries.</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> STALE_TIME</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> 5</span><span style="color:#F97583"> *</span><span style="color:#79B8FF"> 60</span><span style="color:#F97583"> *</span><span style="color:#79B8FF"> 1000</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> makeQueryClient</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">notify</span><span style="color:#F97583">?:</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#B392F0">    show</span><span style="color:#F97583">?:</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#FFAB70">        msg</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> string</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">        opts</span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> { </span><span style="color:#FFAB70">severity</span><span style="color:#F97583">:</span><span style="color:#9ECBFF"> "error"</span><span style="color:#E1E4E8">; </span><span style="color:#FFAB70">autoHideDuration</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> number</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">    ) </span><span style="color:#F97583">=></span><span style="color:#79B8FF"> void</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}) {</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> QueryClient</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">        defaultOptions: {</span></span>
+<span class="line"><span style="color:#E1E4E8">            queries: {</span></span>
+<span class="line"><span style="color:#E1E4E8">                gcTime: </span><span style="color:#79B8FF">STALE_TIME</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">                staleTime: </span><span style="color:#79B8FF">STALE_TIME</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">                refetchOnWindowFocus: </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">                retry: </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">            },</span></span>
+<span class="line"><span style="color:#E1E4E8">            mutations: {</span></span>
+<span class="line"><span style="color:#B392F0">                onError</span><span style="color:#E1E4E8">: (</span><span style="color:#FFAB70">err</span><span style="color:#F97583">:</span><span style="color:#79B8FF"> unknown</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">                    console.</span><span style="color:#B392F0">error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"🛑 Client Error"</span><span style="color:#E1E4E8">, err);</span></span>
+<span class="line"><span style="color:#E1E4E8">                    notify?.</span><span style="color:#B392F0">show</span><span style="color:#E1E4E8">?.(</span><span style="color:#9ECBFF">"Oof! An error occurred"</span><span style="color:#E1E4E8">, {</span></span>
+<span class="line"><span style="color:#E1E4E8">                        severity: </span><span style="color:#9ECBFF">"error"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">                        autoHideDuration: </span><span style="color:#79B8FF">10_000</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">                    });</span></span>
+<span class="line"><span style="color:#E1E4E8">                },</span></span>
+<span class="line"><span style="color:#E1E4E8">            },</span></span>
+<span class="line"><span style="color:#E1E4E8">            dehydrate: {</span></span>
+<span class="line"><span style="color:#E1E4E8">                serializeData: SuperJSON.serialize,</span></span>
+<span class="line"><span style="color:#B392F0">                shouldRedactErrors</span><span style="color:#E1E4E8">: () </span><span style="color:#F97583">=></span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">            },</span></span>
+<span class="line"><span style="color:#E1E4E8">            hydrate: { deserializeData: SuperJSON.deserialize },</span></span>
+<span class="line"><span style="color:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#E1E4E8">    });</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<hr>
+<h2 id="routers-vs-handlers">Routers vs. handlers</h2>
+<p>Keep routers declarative:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#6A737D">// server/trpc/root.ts</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> trpcRouter</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> createTRPCRouter</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">    user: userRouter,</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> type</span><span style="color:#B392F0"> TRPCRouter</span><span style="color:#F97583"> =</span><span style="color:#F97583"> typeof</span><span style="color:#E1E4E8"> trpcRouter;</span></span></code></pre>
+<p>Attach <em>handler</em> instances via middleware so each procedure receives the right
+business service and that service has the necessary context:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> publicUserProcedure</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> publicProcedure.</span><span style="color:#B392F0">use</span><span style="color:#E1E4E8">(({ </span><span style="color:#FFAB70">ctx</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">next</span><span style="color:#E1E4E8"> }) </span><span style="color:#F97583">=></span></span>
+<span class="line"><span style="color:#B392F0">    next</span><span style="color:#E1E4E8">({ ctx: { </span><span style="color:#F97583">...</span><span style="color:#E1E4E8">ctx, handler: </span><span style="color:#F97583">new</span><span style="color:#B392F0"> UserHandlerPublic</span><span style="color:#E1E4E8">(ctx) } })</span></span>
+<span class="line"><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> const</span><span style="color:#79B8FF"> protectedUserProcedure</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> protectedProcedure.</span><span style="color:#B392F0">use</span><span style="color:#E1E4E8">(({ </span><span style="color:#FFAB70">ctx</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">next</span><span style="color:#E1E4E8"> }) </span><span style="color:#F97583">=></span></span>
+<span class="line"><span style="color:#B392F0">    next</span><span style="color:#E1E4E8">({ ctx: { </span><span style="color:#F97583">...</span><span style="color:#E1E4E8">ctx, handler: </span><span style="color:#F97583">new</span><span style="color:#B392F0"> UserHandler</span><span style="color:#E1E4E8">(ctx) } })</span></span>
+<span class="line"><span style="color:#E1E4E8">);</span></span></code></pre>
+<p>This makes it easy to swap adapters (DB, messaging, etc.) and keep auth concerns
+centralized.</p>
+<hr>
+<h2 id="endtoend-typing-helpers">End‑to‑end typing helpers</h2>
+<p>Export the inferred input/output types once and then import them in your
+components/tests:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ts"><code><span class="line"><span style="color:#6A737D">// server/trpc/index.ts</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#F97583"> type</span><span style="color:#E1E4E8"> { inferRouterInputs, inferRouterOutputs } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "@trpc/server"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> { trpcRouter, TRPCRouter } </span><span style="color:#F97583">from</span><span style="color:#9ECBFF"> "./root"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> type</span><span style="color:#B392F0"> TRPCInputs</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> inferRouterInputs</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">TRPCRouter</span><span style="color:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#F97583"> type</span><span style="color:#B392F0"> TRPCOutputs</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> inferRouterOutputs</span><span style="color:#E1E4E8">&#x3C;</span><span style="color:#B392F0">TRPCRouter</span><span style="color:#E1E4E8">>;</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> { trpcRouter };</span></span></code></pre>
+<hr>
+<h2 id="common-pitfalls-and-fixes">Common pitfalls (and fixes)</h2>
+<ol>
+<li><strong>Refreshing on the server</strong>: don’t. In this model, let the <em>client</em> trigger
+refresh on a specific custom signal. Server stays stateless and fast.</li>
+<li><strong>Hiding the signal with a 302</strong>: tRPC expects structured errors; use
+<code>TRPCError</code> with a <code>cause</code> that includes your <code>NEEDS_REFRESH</code> code.</li>
+<li><strong>Infinite retry loops</strong>: retry the request <strong>once</strong> after refresh. If it
+still fails, route to login.</li>
+<li><strong>Mixed serialization</strong>: use SuperJSON on both the link and the tRPC server
+<code>transformer</code>.</li>
+<li><strong>QueryClient re‑creation</strong>: memoize the client in the browser; otherwise,
+cache/race issues surface under Suspense.</li>
+</ol>
+<hr>
+<h2 id="testing-the-flow">Testing the flow</h2>
+<ul>
+<li>Expire an access token (or set very low TTL in a dev recipe).</li>
+<li>Call a <strong>protected</strong> procedure from the UI.</li>
+<li>Confirm the server responds with <code>UNAUTHORIZED</code> and
+<code>cause.type = NEEDS_REFRESH</code>.</li>
+<li>Confirm the client runs <code>attemptRefreshingSession()</code> and then <strong>retries</strong> the
+same request once.</li>
+<li>If refresh is revoked/invalid → user is sent to login.</li>
+</ul>
+<hr>
+<h2 id="security-notes">Security notes</h2>
+<ul>
+<li>Keep <strong>CSRF protection</strong> enabled (SuperTokens defaults are good).</li>
+<li>Scope cookies correctly for your domain and set <code>sameSite</code> appropriately.</li>
+<li>Avoid leaking whether a user exists during public operations; keep errors
+generic.</li>
+<li>Log auth errors on the server, but don’t include secrets or raw tokens.</li>
+</ul>
+<hr>
+<h2 id="wrapping-up">Wrapping up</h2>
+<p>With a tiny shared enum and a disciplined error flow, you get a UX where
+sessions silently refresh and your React code keeps calling
+<code>trpc.user.get.useQuery()</code> like any other data hook. The server remains clean,
+testable, and decoupled from UI concerns.</p>
+<p>You can find all the code used in this blog post and test it for yourself at
+<a href="https://github.com/Solgt/trpc-supertokens">the demo repo</a>.</p>
+<hr>
+<h2 id="appendix-minimal-checklist">Appendix: minimal checklist</h2>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> <code>AUTH_ERROR_CODES</code> shared by server &#x26; client</li>
+<li class="task-list-item"><input type="checkbox" disabled> tRPC <code>transformer: superjson</code> on both ends</li>
+<li class="task-list-item"><input type="checkbox" disabled> <code>createTRPCContext</code> checks <code>getSSRSession(cookies)</code> and throws
+<code>NEEDS_REFRESH</code> when appropriate</li>
+<li class="task-list-item"><input type="checkbox" disabled> <code>protectedProcedure</code> middleware enforces auth and emits <code>FORBIDDEN</code> when
+unauthenticated</li>
+<li class="task-list-item"><input type="checkbox" disabled> Client <code>httpBatchLink.fetch</code> branch: refresh → retry once → redirect if
+fails</li>
+<li class="task-list-item"><input type="checkbox" disabled> Single <code>QueryClient</code> instance in the browser</li>
+<li class="task-list-item"><input type="checkbox" disabled> Routers thin, handlers hold business logic</li>
+</ul>
+<p><strong>Acknowledgements</strong>: SuperTokens · tRPC · Next.js · Zod · React</p>
+<p><strong>Author</strong>: Filip Niklas / Firgrep</p>   <div class="flex justify-end"> <span class="text-right italic">November 9, 2025</span> </div> </div> </div> </div>  </div> </div>  </div> <div class="relative"> <div class="z-30 absolute bottom-0 left-[50%] transform -translate-x-1/2 translate-y-1/2"> <div class="glass rounded-lg p-2"> <p class="text-xs">© Filip Niklas 2024. All poetry rights reserved. Permission is hereby granted to freely copy and use notes about programming and any code.</p> </div> <div class="h-4"></div> </div> </div> </main>  <script type="module">function e(){localStorage.theme="light"}e();</script> </body> </html> <script>
+/**
+ * Thanks to Astro Paper for this code. See:
+ * https://github.com/satnaing/astro-paper/blob/main/src/layouts/PostDetails.astro
+ */
+/** Attaches copy buttons to code blocks in the document,
+   * allowing users to copy code easily. */
+    function attachCopyButtons() {
+        let copyButtonLabel = "Copy";
+        let codeBlocks = Array.from(document.querySelectorAll("pre"));
+
+        for (let codeBlock of codeBlocks) {
+            let wrapper = document.createElement("div");
+            wrapper.style.position = "relative";
+
+            let copyButton = document.createElement("button");
+            copyButton.className =
+                "copy-code absolute right-3 -top-3 rounded bg-slate-200 hover:bg-slate-400  px-2 py-1 text-xs leading-4 text-black font-medium";
+            copyButton.innerHTML = copyButtonLabel;
+            codeBlock.setAttribute("tabindex", "0");
+            codeBlock.appendChild(copyButton);
+
+            // wrap codebock with relative parent element
+            codeBlock.parentNode.insertBefore(wrapper, codeBlock);
+            wrapper.appendChild(codeBlock);
+
+            copyButton.addEventListener("click", async () => {
+                await copyCode(codeBlock, copyButton);
+            });
+        }
+
+        async function copyCode(block, button) {
+            let code = block.querySelector("code");
+            let text = code.innerText;
+
+            await navigator.clipboard.writeText(text);
+
+            // visual feedback that task is completed
+            button.innerText = "Copied!";
+
+            setTimeout(() => {
+                button.innerText = copyButtonLabel;
+            }, 2000);
+        }
+    }
+        
+    attachCopyButtons();
+    document.addEventListener("astro:after-swap", attachCopyButtons);
+</script>
